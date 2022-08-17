@@ -2,13 +2,8 @@
 CLI for LINE WORKS API
 
 ## Description
-Command line tool for LINE WORKS API.
+Command line tool for LINE WORKS API.  
 https://developers.worksmobile.com/jp/reference/introduction?lang=ja
-
-## Config file
-Configuation of this CLI is stored in home directory.
-
-`~/.config/lineworks/`
 
 ## Usage
 See help.
@@ -18,6 +13,10 @@ lineworks -h
 lineworks [subcommand] -h
 ```
 
+## Installation
+todo
+
+## Configuration
 ### Set OAuth client credentials
 
 ```bash
@@ -34,7 +33,7 @@ lineworks configure get-client --profile "profile"
 ```
 
 #### Set Redirect URL on Developer Console
-※ Only User Account authorization
+**※ Only User Account authorization**
 
 Get redirect URL
 
@@ -42,10 +41,10 @@ Get redirect URL
 lineworks configure get-redirect-url --profile "profile"
 ```
 
-Add redirect URL to **Redirect URL** setting of App on Developer Console.
+Add it to **Redirect URL** setting of App on Developer Console.
 
 ### Set Service Account setting
-※ Only Service Account authorization
+**※ Only Service Account authorization**
 
 ```bash
 lineworks configure set-service-account \
@@ -60,29 +59,36 @@ Check configure
 lineworks configure get-service-account --profile "profile"
 ```
 
-### Get Access Token (User Account authorization)
+## Config file
+Configuation of this CLI is stored in home directory.
+
+`~/.config/lineworks/`
+
+## Get Access Token
+### Request Access Token (User Account authorization)
 
 ```bash
 lineworks auth user-account --scopes "scopes" --profile "profile"
 ```
 
-Open browser and sign-on page.
+Automatically open browser and show sign-on page.
 
-Sign on and get access token.
+Sign on by user account.
 
-After request to get access token, Exec `get-access-token` command.
+After request, Exec `get-access-token` command to get access token.
 
 ```bash
 lineworks auth get-access-token --profile "profile"
 ```
 
-### Get Access Token (Service Account authorization)
+### Request Access Token (Service Account authorization)
+**Required to set Service Account configuration before.**
 
 ```bash
 lineworks auth service-account --scopes "scopes" --profile "profile"
 ```
 
-After request to get access token, Exec `get-access-token` command.
+After request, Exec `get-access-token` command to get access token.
 
 ```bash
 lineworks auth get-access-token --profile "profile"
