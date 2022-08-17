@@ -66,6 +66,7 @@ Configuation of this CLI is stored in home directory.
 
 ## Get Access Token
 ### Request Access Token (User Account authorization)
+Request
 
 ```bash
 lineworks auth user-account --scopes "scopes" --profile "profile"
@@ -82,7 +83,9 @@ lineworks auth get-access-token --profile "profile"
 ```
 
 ### Request Access Token (Service Account authorization)
-**Required to set Service Account configuration before.**
+**※ Required to set Service Account configuration before.**
+
+Request
 
 ```bash
 lineworks auth service-account --scopes "scopes" --profile "profile"
