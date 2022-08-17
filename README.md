@@ -88,3 +88,16 @@ After request to get access token, Exec `get-access-token` command.
 lineworks auth get-access-token --profile "profile"
 ```
 
+## Contribution
+
+1. Fork ([https://github.com/mmclsntr/lineworks-cli](https://github.com/mmclsntr/lineworks-cli))
+1. Create a feature branch
+1. Commit your changes
+1. Rebase your local changes against the master branch
+1. Create a new Pull Request
+
+## Authors
+[mmclsntr](https://github.com/mmclsntr)
+
+## License
+[MIT](LICENSE.txt)
