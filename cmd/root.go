@@ -24,16 +24,16 @@ var listProfilesCmd = &cobra.Command{
 	Use:   "list-profiles",
 	Short: "List profiles",
 	RunE: func(cmd *cobra.Command, args []string) error {
-        profiles := auth.ListConfigProfiles()
-        for _, p := range profiles {
-            fmt.Println(p)
-        }
+		profiles := auth.ListConfigProfiles()
+		for _, p := range profiles {
+			fmt.Println(p)
+		}
 		return nil
 	},
 }
 
 func Execute() {
-    rootCmd.CompletionOptions.DisableDefaultCmd = true
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

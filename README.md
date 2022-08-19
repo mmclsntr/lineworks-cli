@@ -5,6 +5,11 @@ CLI for LINE WORKS API
 Command line tool for LINE WORKS API.  
 https://developers.worksmobile.com/jp/reference/introduction?lang=ja
 
+## Feature
+- Get Access Token the way you choose.
+    - [User Account authorization](https://developers.worksmobile.com/jp/reference/authorization-auth?lang=ja)
+    - [Service Account authorization](https://developers.worksmobile.com/jp/reference/authorization-sa?lang=ja)
+
 ## Usage
 See help.
 
@@ -17,6 +22,23 @@ lineworks [subcommand] -h
 todo
 
 ## Configuration
+### Config file
+Configuation of this CLI is stored in home directory.
+
+On Linux, macOS,
+
+```bash
+$HOME/.config/lineworks/
+```
+
+On Windows,
+
+```bash
+%USERPROFILE%\.config\linworks\
+```
+
+If you want to change config dir path, set `$LINEWORKS_CONFIG_DIR` environment variable.
+
 ### Set OAuth client credentials
 
 ```bash
@@ -58,11 +80,6 @@ Check configure
 ```bash
 lineworks configure get-service-account --profile "profile"
 ```
-
-## Config file
-Configuation of this CLI is stored in home directory.
-
-`~/.config/lineworks/`
 
 ## Get Access Token
 ### Request Access Token (User Account authorization)

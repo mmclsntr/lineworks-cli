@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -13,8 +13,6 @@ import (
 
 	"github.com/mmclsntr/lineworks-cli/auth"
 )
-
-const TIMEOUT_SEC = 60
 
 func getToken(profile string) (*auth.Token, error) {
 	token := auth.Token{}
@@ -30,7 +28,7 @@ func getToken(profile string) (*auth.Token, error) {
 }
 
 // User Account Auth
-func authUserAccount(profile string, clientCred *auth.ClientCredential) error {
+func authUserAccount(profile string, clientCred *auth.ClientCredential, timeoutSec int16) error {
 	if clientCred.Scopes == "" {
 		return errors.New("Scope does not set.\n")
 	}
@@ -41,17 +39,18 @@ func authUserAccount(profile string, clientCred *auth.ClientCredential) error {
 	fmt.Printf("Visit the URL for the auth dialog: %v\n", url)
 	time.Sleep(1 * time.Second)
 	browser.OpenURL(url)
-	time.Sleep(1 * time.Second)
 
-	auth.StartCallbackServer(ctx, clientCred.ListenAddr, clientCred.ListenPort, clientCred.RedirectPath, TIMEOUT_SEC, func(code string, state string) {
-		if state != stateReq.String() {
-			fmt.Errorf("'state' does not match")
-		}
+	auth.StartCallbackServer(ctx, clientCred.ListenAddr, clientCred.ListenPort, clientCred.RedirectPath, timeoutSec,
+		func(code string, state string) error {
+			if state != stateReq.String() {
+				return errors.New("'state' does not match")
+			}
 
-		// Get AccessToken
-		tok := clientCred.GetAccessToken(code)
-		tok.WriteConfig(profile)
-	})
+			// Get AccessToken
+			tok := clientCred.GetAccessToken(code)
+			tok.WriteConfig(profile)
+            return nil
+		})
 
 	return nil
 }
@@ -81,10 +80,11 @@ var authUserAccountCmd = &cobra.Command{
 		addr, _ := cmd.Flags().GetString("addr")
 		port, _ := cmd.Flags().GetString("port")
 		path, _ := cmd.Flags().GetString("path")
+		timeout_sec, _ := cmd.Flags().GetInt16("timeout")
 		cred, err := getClientConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 
 		if scopes != "" {
@@ -99,13 +99,11 @@ var authUserAccountCmd = &cobra.Command{
 		if path != "" {
 			cred.RedirectPath = path
 		}
-		err = authUserAccount(profile, cred)
+		err = authUserAccount(profile, cred, timeout_sec)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
-        }
-
-        fmt.Printf("Success\n")
+			return nil
+		}
 		return nil
 	},
 }
@@ -119,7 +117,7 @@ var authServiceAccountCmd = &cobra.Command{
 		cred, err := getClientConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 
 		if scopes != "" {
@@ -128,15 +126,15 @@ var authServiceAccountCmd = &cobra.Command{
 		sa, err := getServiceAccountConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		err = authServiceAccount(profile, cred, sa)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 
-        fmt.Printf("Success\n")
+		fmt.Printf("Success\n")
 		return nil
 	},
 }
@@ -149,9 +147,9 @@ var authGetAccessTokenCmd = &cobra.Command{
 		token, err := getToken(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
-        fmt.Printf("%s", token.AccessToken)
+		fmt.Printf("%s", token.AccessToken)
 		return nil
 	},
 }
@@ -164,9 +162,9 @@ var authGetScopesCmd = &cobra.Command{
 		token, err := getToken(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
-        fmt.Printf("%s", token.Scopes)
+		fmt.Printf("%s", token.Scopes)
 		return nil
 	},
 }
@@ -185,4 +183,5 @@ func init() {
 	authUserAccountCmd.Flags().StringP("addr", "", "", "Listen address of callback server")
 	authUserAccountCmd.Flags().StringP("port", "", "", "Listen port of callback server")
 	authUserAccountCmd.Flags().StringP("path", "", "", "URL path of callback server")
+	authUserAccountCmd.Flags().Int16P("timeout", "", 120, "Timeout secound.")
 }

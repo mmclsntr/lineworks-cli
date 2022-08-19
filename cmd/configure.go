@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
-    "os"
-    "errors"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -41,9 +41,9 @@ func setClientConfigure(profile string, clientId string, clientSecret string, sc
 
 	err := cred.WriteConfig(profile)
 	if err != nil {
-        return err
+		return err
 	}
-    return nil
+	return nil
 }
 
 func getServiceAccountConfigure(profile string) (*auth.ServiceAccount, error) {
@@ -62,7 +62,7 @@ func getServiceAccountConfigure(profile string) (*auth.ServiceAccount, error) {
 func setServiceAccountConfigure(profile string, serviceAccountId string, privateKeyFile string) error {
 	privateKeyData, err := ioutil.ReadFile(privateKeyFile)
 	if err != nil {
-        return err
+		return err
 	}
 
 	sa := auth.ServiceAccount{
@@ -72,9 +72,9 @@ func setServiceAccountConfigure(profile string, serviceAccountId string, private
 
 	err = sa.WriteConfig(profile)
 	if err != nil {
-        return err
+		return err
 	}
-    return nil
+	return nil
 }
 
 var configureCmd = &cobra.Command{
@@ -90,13 +90,13 @@ var configureGetClientCmd = &cobra.Command{
 		cred, err := getClientConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 
 		b, err := json.MarshalIndent(cred, "", "    ")
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		fmt.Printf("%s\n", b)
 		return nil
@@ -119,17 +119,17 @@ var configureSetClientCmd = &cobra.Command{
 		redirect_url := fmt.Sprintf("http://%s:%s%s", addr, port, path)
 		setClientConfigure(profile, client_id, client_secret, scopes, redirect_url, addr, port, path, domain_id)
 
-        // View
+		// View
 		cred, err := getClientConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 
 		b, err := json.MarshalIndent(cred, "", "    ")
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		fmt.Printf("%s\n", b)
 		return nil
@@ -144,7 +144,7 @@ var configureGetRedirectUrlCmd = &cobra.Command{
 		cred, err := getClientConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		fmt.Printf("%s\n", cred.GetRedirectUrl())
 		return nil
@@ -160,12 +160,12 @@ var configureGetServiceAccountCmd = &cobra.Command{
 		sa, err := getServiceAccountConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		b, err := json.MarshalIndent(sa, "", "    ")
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		fmt.Printf("%s\n", b)
 		return nil
@@ -182,16 +182,16 @@ var configureSetServiceAccountCmd = &cobra.Command{
 
 		setServiceAccountConfigure(profile, serviceAccountId, privateKeyFile)
 
-        // View
+		// View
 		sa, err := getServiceAccountConfigure(profile)
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		b, err := json.MarshalIndent(sa, "", "    ")
 		if err != nil {
 			fmt.Printf("%s", err)
-            return nil
+			return nil
 		}
 		fmt.Printf("%s\n", b)
 		return nil

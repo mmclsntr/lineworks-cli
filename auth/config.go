@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/golang-jwt/jwt/v4"
+	"io/ioutil"
 	"log"
 	"net/url"
 	"os"
 	"path/filepath"
-	"io/ioutil"
 	"time"
 )
 
@@ -34,10 +34,12 @@ type Token struct {
 	ExpiredIn    string `toml:"expired_in" json:"expired_in"`
 }
 
-const CONFIG_DIR_NAME = "/.config/lineworks"
-const CONFIG_OAUTH_FILE_NAME = "/oauth.toml"
-const CONFIG_SERVICE_ACCOUNT_FILE_NAME = "/service_account.toml"
-const CONFIG_TOKEN_FILE_NAME = "/token.toml"
+const CONFIG_DIR_NAME = ".config"
+const CONFIG_SERVICE_DIR_NAME = "lineworks"
+const CONFIG_OAUTH_FILE_NAME = "oauth.toml"
+const CONFIG_SERVICE_ACCOUNT_FILE_NAME = "service_account.toml"
+const CONFIG_TOKEN_FILE_NAME = "token.toml"
+const CONFIG_PATH_ENV_NAME = "LINEWORKS_CONFIG_DIR"
 
 // Generate Authorization Code URL
 func (cred *ClientCredential) AuthCodeURL(state string) string {
@@ -155,21 +157,36 @@ func (cred *ClientCredential) GetRedirectUrl() string {
 }
 
 func getConfigBasePath() string {
+	if configPath := os.Getenv(CONFIG_PATH_ENV_NAME); configPath != "" {
+		return configPath
+	}
+
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return ""
 	}
-	configDir := filepath.Join(homeDir, CONFIG_DIR_NAME)
+	configDir := filepath.Join(homeDir, CONFIG_DIR_NAME, CONFIG_SERVICE_DIR_NAME)
 	return configDir
 }
 
-func getConfigFileName(profile string, file_name string) string {
+func getConfigProfileDir(profile string) string {
 	configDir := getConfigBasePath()
 	configDir = filepath.Join(configDir, profile)
+
+	return configDir
+}
+
+func makeConfigProfileDir(profile string) error {
+	configDir := getConfigProfileDir(profile)
 	if err := os.MkdirAll(configDir, 0700); err != nil {
-		fmt.Println(err)
+		return err
 	}
+	return nil
+}
+
+func getConfigFileName(profile string, file_name string) string {
+	configDir := getConfigProfileDir(profile)
 	configFile := filepath.Join(configDir, file_name)
 
 	return configFile
@@ -177,15 +194,15 @@ func getConfigFileName(profile string, file_name string) string {
 
 func ListConfigProfiles() []string {
 	configDir := getConfigBasePath()
-    profiles := []string{}
+	profiles := []string{}
 
-    files, _ := ioutil.ReadDir(configDir)
-    for _, f := range files {
-        if f.IsDir() {
-            profiles = append(profiles, f.Name())
-        }
-    }
-    return profiles
+	files, _ := ioutil.ReadDir(configDir)
+	for _, f := range files {
+		if f.IsDir() {
+			profiles = append(profiles, f.Name())
+		}
+	}
+	return profiles
 }
 
 func (cred ClientCredential) ReadConfig(profile string) (*ClientCredential, error) {
@@ -206,6 +223,10 @@ func (cred ClientCredential) ReadConfig(profile string) (*ClientCredential, erro
 }
 
 func (cred *ClientCredential) WriteConfig(profile string) error {
+	err := makeConfigProfileDir(profile)
+	if err != nil {
+		return err
+	}
 	configFile := getConfigFileName(profile, CONFIG_OAUTH_FILE_NAME)
 	fp, err := os.Create(configFile)
 	defer fp.Close()
@@ -235,6 +256,10 @@ func (sa ServiceAccount) ReadConfig(profile string) (*ServiceAccount, error) {
 }
 
 func (sa *ServiceAccount) WriteConfig(profile string) error {
+	err := makeConfigProfileDir(profile)
+	if err != nil {
+		return err
+	}
 	configFile := getConfigFileName(profile, CONFIG_SERVICE_ACCOUNT_FILE_NAME)
 	fp, err := os.Create(configFile)
 	defer fp.Close()
@@ -264,6 +289,10 @@ func (token Token) ReadConfig(profile string) (*Token, error) {
 }
 
 func (token *Token) WriteConfig(profile string) error {
+	err := makeConfigProfileDir(profile)
+	if err != nil {
+		return err
+	}
 	configFile := getConfigFileName(profile, CONFIG_TOKEN_FILE_NAME)
 	fp, err := os.Create(configFile)
 	defer fp.Close()

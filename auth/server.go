@@ -13,7 +13,7 @@ import (
 type CallbackHandler struct {
 	Context       context.Context
 	ContextCancel context.CancelFunc
-	CallbackFunc  func(code string, state string)
+	CallbackFunc  func(code string, state string) error
 }
 
 func (handler *CallbackHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +40,7 @@ func (handler *CallbackHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 }
 
 // Start callback local server
-func StartCallbackServer(ctx context.Context, addr string, port string, path string, timeoutSec int, callback func(code string, state string)) {
+func StartCallbackServer(ctx context.Context, addr string, port string, path string, timeoutSec int16, callback func(code string, state string) error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeoutSec)*time.Second)
 
 	handler := &CallbackHandler{
@@ -70,7 +70,7 @@ func StartCallbackServer(ctx context.Context, addr string, port string, path str
 		//}
 		if err := ctx.Err(); errors.Is(err, context.Canceled) {
 			// キャンセルされていた場合
-			fmt.Println("Done")
+			fmt.Println("Success")
 		} else if errors.Is(err, context.DeadlineExceeded) {
 			// タイムアウトだった場合
 			fmt.Println("Time out")
