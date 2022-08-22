@@ -5,6 +5,9 @@ CLI for LINE WORKS API
 Command line tool for LINE WORKS API.  
 https://developers.worksmobile.com/jp/reference/introduction?lang=ja
 
+## Article
+Japanese article : 
+
 ## Feature
 - Get Access Token the way you choose.
     - [User Account authorization](https://developers.worksmobile.com/jp/reference/authorization-auth?lang=ja)
@@ -19,7 +22,22 @@ lineworks [subcommand] -h
 ```
 
 ## Installation
-todo
+Download binary files from [Releases](https://github.com/mmclsntr/lineworks-cli/releases)
+
+Choose a download link according to your environment.
+
+- macOS (Intel) : lineworks-cli_x.x.x_Darwin_x86_64.tar.gz
+- macOS (M1/M2) : lineworks-cli_x.x.x_Darwin_arm64.tar.gz
+- Windows (64bit) : lineworks-cli_x.x.x_Windows_x86_64.tar.gz
+- Windows (Arm) : lineworks-cli_x.x.x_Windows_arm64.tar.gz
+- Linux (Arm) : lineworks-cli_x.x.x_Linux_arm64.tar.gz
+- Linux (Intel 64bit) : lineworks-cli_x.x.x_Linux_x86_64.tar.gz
+- Linux (Intel 32bit) : lineworks-cli_x.x.x_Linux_i386.tar.gz
+
+Binary file name
+
+- Linux/macOS : `lineworks`
+- Windows : `lineworks.exe`
 
 ## Configuration
 ### Config file
@@ -33,25 +51,61 @@ $HOME/.config/lineworks/
 
 On Windows,
 
-```bash
+```powershell
 %USERPROFILE%\.config\linworks\
 ```
 
 If you want to change config dir path, set `$LINEWORKS_CONFIG_DIR` environment variable.
 
-### Set OAuth client credentials
+### Profile
+The setting can be set for each profile, and the setting can be switched by the `profile` parameter specified when executing the command.
+
+Refer to the list of configured profiles with the following command.
+
+On Linux, macOS,
 
 ```bash
-lineworks configure set-client \
+./lineworks list-profiles
+```
+
+On Windows,
+
+```powershell
+.\lineworks.exe list-profiles
+```
+
+### Set OAuth client credentials
+
+On Linux, macOS,
+
+```bash
+./lineworks configure set-client \
     --client-id "client_id" \
     --client-secret "client_secret" \
     --profile "profile"
 ```
 
-Check configure
+On Windows,
+
+```powershell
+.\lineworks.exe configure set-client `
+    --client-id "client_id" `
+    --client-secret "client_secret" `
+    --profile "profile"
+```
+
+You can Check configured settings.
+
+On Linux, macOS,
 
 ```bash
-lineworks configure get-client --profile "profile"
+./lineworks configure get-client --profile "profile"
+```
+
+On Windows,
+
+```powershell
+.\lineworks.exe configure get-client --profile "profile"
 ```
 
 #### Set Redirect URL on Developer Console
@@ -59,8 +113,16 @@ lineworks configure get-client --profile "profile"
 
 Get redirect URL
 
+On Linux, macOS,
+
 ```bash
-lineworks configure get-redirect-url --profile "profile"
+./lineworks configure get-redirect-url --profile "profile"
+```
+
+On Windows,
+
+```powershell
+.\lineworks.exe configure get-redirect-url --profile "profile"
 ```
 
 Add it to **Redirect URL** setting of App on Developer Console.
@@ -68,50 +130,86 @@ Add it to **Redirect URL** setting of App on Developer Console.
 ### Set Service Account setting
 **※ Only Service Account authorization**
 
+On Linux, macOS,
+
 ```bash
-lineworks configure set-service-account \
+./lineworks configure set-service-account \
     --service-account-id "serivce_account_id" \
     --private-key-file "private_key_file_path" \
     --profile "profile"
 ```
 
-Check configure
+On Windows,
+
+```powershell
+.\lineworks.exe configure set-service-account `
+    --service-account-id "serivce_account_id" `
+    --private-key-file "private_key_file_path" `
+    --profile "profile"
+```
+
+You can Check configured settings.
+
+On Linux, macOS,
 
 ```bash
-lineworks configure get-service-account --profile "profile"
+./lineworks configure get-service-account --profile "profile"
+```
+
+On Windows,
+
+```powershell
+.\lineworks.exe configure get-service-account --profile "profile"
 ```
 
 ## Get Access Token
 ### Request Access Token (User Account authorization)
 Request
 
+On Linux, macOS,
+
 ```bash
-lineworks auth user-account --scopes "scopes" --profile "profile"
+./lineworks auth user-account --scopes "scopes" --profile "profile"
+```
+
+On Windows,
+
+```powershell
+.\lineworks.exe auth user-account --scopes "scopes" --profile "profile"
 ```
 
 Automatically open browser and show sign-on page.
 
 Sign on by user account.
 
-After request, Exec `get-access-token` command to get access token.
-
-```bash
-lineworks auth get-access-token --profile "profile"
-```
-
 ### Request Access Token (Service Account authorization)
 **※ Required to set Service Account configuration before.**
 
 Request
 
+On Linux, macOS,
+
 ```bash
-lineworks auth service-account --scopes "scopes" --profile "profile"
+./lineworks auth service-account --scopes "scopes" --profile "profile"
 ```
 
-After request, Exec `get-access-token` command to get access token.
+On Windows,
+
+```powershell
+.\lineworks.exe auth service-account --scopes "scopes" --profile "profile"
+```
+
+### Refer Access Token
+On Linux, macOS,
 
 ```bash
-lineworks auth get-access-token --profile "profile"
+./lineworks auth get-access-token --profile "profile"
+```
+
+On Windows,
+
+```powershell
+.\lineworks auth get-access-token --profile "profile"
 ```
 
 ## Contribution
