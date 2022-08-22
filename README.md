@@ -6,7 +6,7 @@ Command line tool for LINE WORKS API.
 https://developers.worksmobile.com/jp/reference/introduction?lang=ja
 
 ## Article
-Japanese article : 
+Japanese article : https://qiita.com/mmclsntr/items/ecd2e88462a6a30be573
 
 ## Feature
 - Get Access Token the way you choose.

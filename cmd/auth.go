@@ -179,9 +179,11 @@ func init() {
 	authCmd.PersistentFlags().StringP("profile", "", "", "Profile name")
 	authCmd.MarkPersistentFlagRequired("profile")
 
-	authCmd.PersistentFlags().StringP("scopes", "", "", "Scopes. Must be comma-delimited format (ex. bot,user.read,board)")
+	authUserAccountCmd.Flags().StringP("scopes", "", "", "Scopes. Must be comma-delimited format (ex. bot,user.read,board)")
 	authUserAccountCmd.Flags().StringP("addr", "", "", "Listening address of callback server")
 	authUserAccountCmd.Flags().StringP("port", "", "", "Listening port of callback server")
 	authUserAccountCmd.Flags().StringP("path", "", "", "URL path of callback server")
 	authUserAccountCmd.Flags().Int16P("timeout", "", 120, "Timeout secound.")
+
+	authServiceAccountCmd.Flags().StringP("scopes", "", "", "Scopes. Must be comma-delimited format (ex. bot,user.read,board)")
 }
