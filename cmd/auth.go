@@ -30,7 +30,7 @@ func getToken(profile string) (*auth.Token, error) {
 // User Account Auth
 func authUserAccount(profile string, clientCred *auth.ClientCredential, timeoutSec int16) error {
 	if clientCred.Scopes == "" {
-		return errors.New("Scope does not set.\n")
+		return errors.New("'scopes' does not set.\n")
 	}
 	ctx := context.Background()
 
@@ -58,7 +58,7 @@ func authUserAccount(profile string, clientCred *auth.ClientCredential, timeoutS
 // Service Account Auth
 func authServiceAccount(profile string, clientCred *auth.ClientCredential, serviceAccount *auth.ServiceAccount) error {
 	if clientCred.Scopes == "" {
-		return errors.New("Scope does not set.\n")
+		return errors.New("'scopes' does not set.\n")
 	}
 
 	tok := clientCred.GetAccessTokenJWT(*serviceAccount)
