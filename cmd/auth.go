@@ -30,7 +30,7 @@ func getToken(profile string) (*auth.Token, error) {
 // User Account Auth
 func authUserAccount(profile string, clientCred *auth.ClientCredential, timeoutSec int16) error {
 	if clientCred.Scopes == "" {
-		return errors.New("Scope does not set.\n")
+		return errors.New("'scopes' does not set.\n")
 	}
 	ctx := context.Background()
 
@@ -49,7 +49,7 @@ func authUserAccount(profile string, clientCred *auth.ClientCredential, timeoutS
 			// Get AccessToken
 			tok := clientCred.GetAccessToken(code)
 			tok.WriteConfig(profile)
-            return nil
+			return nil
 		})
 
 	return nil
@@ -58,7 +58,7 @@ func authUserAccount(profile string, clientCred *auth.ClientCredential, timeoutS
 // Service Account Auth
 func authServiceAccount(profile string, clientCred *auth.ClientCredential, serviceAccount *auth.ServiceAccount) error {
 	if clientCred.Scopes == "" {
-		return errors.New("Scope does not set.\n")
+		return errors.New("'scopes' does not set.\n")
 	}
 
 	tok := clientCred.GetAccessTokenJWT(*serviceAccount)
@@ -68,7 +68,7 @@ func authServiceAccount(profile string, clientCred *auth.ClientCredential, servi
 
 var authCmd = &cobra.Command{
 	Use:   "auth",
-	Short: "Authorization",
+	Short: "Authorization for access token.",
 }
 
 var authUserAccountCmd = &cobra.Command{
@@ -141,7 +141,7 @@ var authServiceAccountCmd = &cobra.Command{
 
 var authGetAccessTokenCmd = &cobra.Command{
 	Use:   "get-access-token",
-	Short: "Get Access Token",
+	Short: "Get access token",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 		token, err := getToken(profile)
@@ -156,7 +156,7 @@ var authGetAccessTokenCmd = &cobra.Command{
 
 var authGetScopesCmd = &cobra.Command{
 	Use:   "get-scopes",
-	Short: "Get scopes",
+	Short: "Get scopes which the access token has.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 		token, err := getToken(profile)
@@ -179,9 +179,9 @@ func init() {
 	authCmd.PersistentFlags().StringP("profile", "", "", "Profile name")
 	authCmd.MarkPersistentFlagRequired("profile")
 
-	authCmd.PersistentFlags().StringP("scopes", "", "", "List scopes by comma-delimited format (ex. bot,user.read,board)")
-	authUserAccountCmd.Flags().StringP("addr", "", "", "Listen address of callback server")
-	authUserAccountCmd.Flags().StringP("port", "", "", "Listen port of callback server")
+	authCmd.PersistentFlags().StringP("scopes", "", "", "Scopes. Must be comma-delimited format (ex. bot,user.read,board)")
+	authUserAccountCmd.Flags().StringP("addr", "", "", "Listening address of callback server")
+	authUserAccountCmd.Flags().StringP("port", "", "", "Listening port of callback server")
 	authUserAccountCmd.Flags().StringP("path", "", "", "URL path of callback server")
 	authUserAccountCmd.Flags().Int16P("timeout", "", 120, "Timeout secound.")
 }

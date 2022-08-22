@@ -11,13 +11,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "lineworks",
-	Short: "A brief description of your application",
-	Long: `LINE WORKS CLI
-creating`,
-	Run: func(cmd *cobra.Command, args []string) {
-		name, _ := cmd.Flags().GetString("name")
-		fmt.Printf("root command %s\n", name)
-	},
+	Short: "Command line tool for LINE WORKS API",
 }
 
 var listProfilesCmd = &cobra.Command{

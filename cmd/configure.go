@@ -79,12 +79,12 @@ func setServiceAccountConfigure(profile string, serviceAccountId string, private
 
 var configureCmd = &cobra.Command{
 	Use:   "configure",
-	Short: "Configure",
+	Short: "Configure authorization settings for access token.",
 }
 
 var configureGetClientCmd = &cobra.Command{
 	Use:   "get-client",
-	Short: "Configure get client credentials",
+	Short: "Get client credentials.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 		cred, err := getClientConfigure(profile)
@@ -105,7 +105,7 @@ var configureGetClientCmd = &cobra.Command{
 
 var configureSetClientCmd = &cobra.Command{
 	Use:   "set-client",
-	Short: "Configure set client credentials",
+	Short: "Set client credentials.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 		client_id, _ := cmd.Flags().GetString("client-id")
@@ -138,7 +138,7 @@ var configureSetClientCmd = &cobra.Command{
 
 var configureGetRedirectUrlCmd = &cobra.Command{
 	Use:   "get-redirect-url",
-	Short: "Configure get redirect url",
+	Short: "Get redirect url.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 		cred, err := getClientConfigure(profile)
@@ -153,7 +153,7 @@ var configureGetRedirectUrlCmd = &cobra.Command{
 
 var configureGetServiceAccountCmd = &cobra.Command{
 	Use:   "get-service-account",
-	Short: "Configure get service account",
+	Short: "Get service account settings.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 
@@ -174,7 +174,7 @@ var configureGetServiceAccountCmd = &cobra.Command{
 
 var configureSetServiceAccountCmd = &cobra.Command{
 	Use:   "set-service-account",
-	Short: "Configure set service account",
+	Short: "Set service account settings.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 		serviceAccountId, _ := cmd.Flags().GetString("service-account-id")
@@ -213,9 +213,9 @@ func init() {
 	configureSetClientCmd.MarkFlagRequired("client-id")
 	configureSetClientCmd.Flags().StringP("client-secret", "", "", "Client Secret")
 	configureSetClientCmd.MarkFlagRequired("client-secret")
-	configureSetClientCmd.Flags().StringP("scopes", "", "", "List scopes by comma-delimited format (ex. bot,user.read,board)")
-	configureSetClientCmd.Flags().StringP("addr", "", DEFAULT_ADDR, "Listen address of callback server")
-	configureSetClientCmd.Flags().StringP("port", "", DEFAULT_PORT, "Listen port of callback server")
+	configureSetClientCmd.Flags().StringP("scopes", "", "", "Scopes. Must be comma-delimited format (ex. bot,user.read,board)")
+	configureSetClientCmd.Flags().StringP("addr", "", DEFAULT_ADDR, "Listening address of callback server")
+	configureSetClientCmd.Flags().StringP("port", "", DEFAULT_PORT, "Listening port of callback server")
 	configureSetClientCmd.Flags().StringP("path", "", DEFAULT_PATH, "URL path of callback server")
 	configureSetClientCmd.Flags().StringP("domain-id", "", "", "Domain ID")
 
